@@ -124,12 +124,16 @@ void playNote(){
 
 void updateDisplay(){  
   if(gameState==0){lcd.setCursor(0, 0); lcd.print("Press Button to");lcd.setCursor(0, 1);lcd.print("Start Game!");}
-  if(gameState==1){lcd.setCursor(0, 0); lcd.print("Setting...      ");lcd.setCursor(0, 1);lcd.print("Score: "+String(currScore)+" pts ");}
-  if(gameState==2){lcd.setCursor(0, 0); lcd.print("Target: "+String(currTarget));lcd.setCursor(0, 1);lcd.print("Lives Left: "+String(lifeCount)+" ");}
-  if(gameState==3){lcd.setCursor(0, 0); lcd.print("Final Score:");lcd.setCursor(0, 1);lcd.print(currScore);}
-  if(gameState==4){lcd.setCursor(0, 0); lcd.print("Nice Job!        ");lcd.setCursor(0, 1);lcd.print("                 ");}
-  if(gameState==5){lcd.setCursor(0, 0); lcd.print("Whoops!          ");lcd.setCursor(0, 1);lcd.print("                 ");}
+  if(gameState==1){lcd.setCursor(0, 0); lcd.print("Setting...");lcd.setCursor(0, 1);lcd.print("Score: "+String(currScore)+"pts");}
+  if(gameState==2){lcd.setCursor(0, 0); lcd.print("Target: "+String(currTarget));lcd.setCursor(0, 1);lcd.print("Lives Left: "+String(lifeCount));}
+  if(gameState==3){lcd.setCursor(0, 0); lcd.print("Final Score:");lcd.setCursor(0, 1);lcd.print(String(currScore)+"pts");}
+  if(gameState==4){lcd.setCursor(0, 0); lcd.print("Nice Job!");lcd.setCursor(0, 1);lcd.print("");}
+  if(gameState==5){lcd.setCursor(0, 0); lcd.print("Whoops!");lcd.setCursor(0, 1);lcd.print("");}
 
+}
+
+void clearDisplay(){
+  lcd.setCursor(0, 0); lcd.print("                ");lcd.setCursor(0, 1);lcd.print("                ");
 }
 void controlRightBar(){
   if(gameState==1&&returnBallState==0){m1=digitalRead(lrLRpin);if(m1){s1.write(100);}else{s1.write(90);}
@@ -187,7 +191,7 @@ Serial.println(' ');
   if(gameState==0){     displayThread.check();
                         musicThread.check();
                         if(digitalRead(p3pin)==1){gameState=1;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);s1.write(0);s2.write(180);delay(100);s1.write(90);s2.write(90);
-                                                startTime=millis()/1000.0;}
+                                                startTime=millis()/1000.0;clearDisplay();}
   }
   else if(gameState==1){displayThread.check();
                         rightBarThread.check();
@@ -196,7 +200,7 @@ Serial.println(' ');
                         ballReturnThread.check();
                         if(!m1&&!m4){
                           if(returnBallState==0){s1.detach();s2.detach();returnStartTime=millis()/1000.0;returnBallState=1;s3.attach(s3pin);delay(100);}
-                          else if(millis()/1000.0-returnStartTime>5&&returnBallState==1){gameState=2;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);}
+                          else if(millis()/1000.0-returnStartTime>5&&returnBallState==1){gameState=2;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);clearDisplay();}
                           }
                         if(lifeCount==0){gameState=3;thisNote=0;}
                         if(currTarget==1){digitalWrite(led1pin,HIGH);}
@@ -221,12 +225,23 @@ Serial.println(' ');
                         if(millis()/1000.0-returnStartTime>10&&returnBallState==1){returnBallState=2;}
                         else if(millis()/1000.0-returnStartTime>15&&returnBallState==2){returnBallState=3;s3.detach();}
                         else if(digitalRead(lr0pin)==0&&returnBallState==3){thisNote=0;returnBallState=0;
-                                                                        if(targetBool==1){gameState=4;returnStartTime=millis()/1000.0;currTarget+=1;}
-                                                                        else{gameState=5; lifeCount=lifeCount-1;returnStartTime=millis()/1000.0;}
+                                                                        if(targetBool==1){
+                                                                        if(currTarget==1){currScore+=2000.0/(millis()/1000.0-returnStartTime)+100;gameState=4;}
+                                                                        else if(currTarget==2){currScore+=2000.0/(millis()/1000.0-returnStartTime)+500;gameState=4;}
+                                                                        else if(currTarget==3){currScore+=2000.0/(millis()/1000.0-returnStartTime)+1000;gameState=4;}
+                                                                        else if(currTarget==4){currScore+=5000.0/(millis()/1000.0-returnStartTime)+1000;gameState=4;}
+                                                                        else if(currTarget==5){currScore+=5000.0/(millis()/1000.0-returnStartTime)+3000;gameState=4;}
+                                                                        else if(currTarget==6){currScore+=5000.0/(millis()/1000.0-returnStartTime)+5000;gameState=4;}
+                                                                        else if(currTarget==7){currScore+=10000.0/(millis()/1000.0-returnStartTime)+10000;gameState=4;}
+                                                                        else if(currTarget==8){currScore+=30000.0/(millis()/1000.0-returnStartTime)+20000;gameState=4;}
+                                                                        else if(currTarget==9){currScore+=50000.0/(millis()/1000.0-returnStartTime)+30000;gameState=4;}
+                                                                        else if(currTarget==10){currScore+=100000.0/(millis()/1000.0-returnStartTime)+50000+lifeCount*10000;gameState=3;}                                                                        
+                                                                        returnStartTime=millis()/1000.0;currTarget+=1;clearDisplay();}
+                                                                        else{gameState=5; lifeCount=lifeCount-1; currScore = currScore / 2.0; returnStartTime=millis()/1000.0;clearDisplay();}
                         }
                         if(lifeCount==0){gameState=3;thisNote=0;}
   
-                        if(currTarget==1){if(analogRead(lr1pin)<10){targetBool=1;digitalWrite(led1pin,LOW);}}
+                        if(currTarget==1){if(analogRead(lr1pin)<20){targetBool=1;digitalWrite(led1pin,LOW);}}
                         else if(currTarget==2){if(analogRead(lr2pin)<20){targetBool=1;digitalWrite(led2pin,LOW);}}
                         else if(currTarget==3){if(analogRead(lr3pin)<20){targetBool=1;digitalWrite(led3pin,LOW);}}
                         else if(currTarget==4){if(analogRead(lr4pin)<40 ){targetBool=1;digitalWrite(led4pin,LOW);}}
@@ -235,10 +250,8 @@ Serial.println(' ');
                         else if(currTarget==7){if(analogRead(lr7pin)<20){targetBool=1;digitalWrite(led7pin,LOW);}}
                         else if(currTarget==8){if(analogRead(lr8pin)<20){targetBool=1;digitalWrite(led8pin,LOW);}}
                         else if(currTarget==9){if(analogRead(lr9pin)<20){targetBool=1;digitalWrite(led9pin,LOW);}}
-                        else if(currTarget==10){if(analogRead(lr10pin)<20){targetBool=1;gameState=3;digitalWrite(led10pin,LOW);}}
+                        else if(currTarget==10){if(analogRead(lr10pin)<20){targetBool=1;digitalWrite(led10pin,LOW);}}
                         
-
-
     }
   else if(gameState==3){displayThread.check();    
                         rightBarThread.check();
@@ -246,16 +259,16 @@ Serial.println(' ');
                         ballReturnThread.check();
                         musicThread.check();
                         if(digitalRead(p3pin)==1){gameState=1;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);s1.write(0);s2.write(180);delay(100);s1.write(90);s2.write(90);
-                                                startTime=millis()/1000.0;lifeCount=3;currTarget=1;}
+                                                startTime=millis()/1000.0;lifeCount=3;currTarget=1;clearDisplay();}
                         digitalWrite(led1pin,LOW); digitalWrite(led2pin,LOW); digitalWrite(led3pin,LOW); digitalWrite(led4pin,LOW);digitalWrite(led5pin,LOW);    
   digitalWrite(led6pin,LOW);digitalWrite(led7pin,LOW); digitalWrite(led8pin,LOW); digitalWrite(led9pin,LOW); digitalWrite(led10pin,LOW);  
   }
   else if(gameState==4){displayThread.check();
                         musicThread.check();    
-                        if(millis()/1000.0-returnStartTime>2){gameState=1;thisNote=0;targetBool=0;}
+                        if(millis()/1000.0-returnStartTime>2){gameState=1;thisNote=0;targetBool=0;clearDisplay();}
   }
   else if(gameState==5){displayThread.check();
                         musicThread.check();    
-                        if(millis()/1000.0-returnStartTime>2){gameState=1;thisNote=0;targetBool=0;}
+                        if(millis()/1000.0-returnStartTime>2){gameState=1;thisNote=0;targetBool=0;clearDisplay();}
   }
 }
