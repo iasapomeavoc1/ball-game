@@ -22,7 +22,7 @@ int lr0pin = 3;int lr1pin = 1;int lr2pin = 2;int lr3pin = 3;int lr4pin = 5;int l
 int startTime = 0;
 int elapsedTime = 0;
 int lifeCount = 3;
-int currTarget = 1;
+int currTarget = 10;
 int targetBool = 0;
 int currScore = 0;
 int highScore = 0;
@@ -244,11 +244,11 @@ Serial.println(' ');
                         if(currTarget==1){if(analogRead(lr1pin)<10){targetBool=1;digitalWrite(led1pin,LOW);}}
                         else if(currTarget==2){if(analogRead(lr2pin)<10){targetBool=1;digitalWrite(led2pin,LOW);}}
                         else if(currTarget==3){if(analogRead(lr3pin)<10){targetBool=1;digitalWrite(led3pin,LOW);}}
-                        else if(currTarget==4){if(analogRead(lr4pin)<10){targetBool=1;digitalWrite(led4pin,LOW);}}
+                        else if(currTarget==4){if(analogRead(lr4pin)<20){targetBool=1;digitalWrite(led4pin,LOW);}}
                         else if(currTarget==5){if(analogRead(lr5pin)<10){targetBool=1;digitalWrite(led5pin,LOW);}}
-                        else if(currTarget==6){if(analogRead(lr6pin)<10){targetBool=1;digitalWrite(led6pin,LOW);}}
+                        else if(currTarget==6){if(analogRead(lr6pin)<20){targetBool=1;digitalWrite(led6pin,LOW);}}
                         else if(currTarget==7){if(analogRead(lr7pin)<10){targetBool=1;digitalWrite(led7pin,LOW);}}
-                        else if(currTarget==8){if(analogRead(lr8pin)<10){targetBool=1;digitalWrite(led8pin,LOW);}}
+                        else if(currTarget==8){if(analogRead(lr8pin)<20){targetBool=1;digitalWrite(led8pin,LOW);}}
                         else if(currTarget==9){if(analogRead(lr9pin)<10){targetBool=1;digitalWrite(led9pin,LOW);}}
                         else if(currTarget==10){if(analogRead(lr10pin)<10){targetBool=1;digitalWrite(led10pin,LOW);}}
                         
@@ -258,6 +258,7 @@ Serial.println(' ');
                         leftBarThread.check();
                         ballReturnThread.check();
                         musicThread.check();
+                        currScore=0;
                         if(digitalRead(p3pin)==1){gameState=1;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);s1.write(0);s2.write(180);delay(100);s1.write(90);s2.write(90);
                                                 startTime=millis()/1000.0;lifeCount=3;currTarget=1;clearDisplay();}
                         digitalWrite(led1pin,LOW); digitalWrite(led2pin,LOW); digitalWrite(led3pin,LOW); digitalWrite(led4pin,LOW);digitalWrite(led5pin,LOW);    
