@@ -22,7 +22,7 @@ int lr0pin = 3;int lr1pin = 1;int lr2pin = 2;int lr3pin = 3;int lr4pin = 5;int l
 int startTime = 0;
 int elapsedTime = 0;
 int lifeCount = 3;
-int currTarget = 10;
+int currTarget = 1;
 int targetBool = 0;
 int currScore = 0;
 int highScore = 0;
@@ -139,7 +139,7 @@ void controlRightBar(){
   if(gameState==1&&returnBallState==0){m1=digitalRead(lrLRpin);if(m1){s1.write(100);}else{s1.write(90);}
                   }
   else if(gameState==2){p1 = analogRead(p1pin);m1=digitalRead(lrLRpin);m2=digitalRead(lrURpin);
-                   if(p1>1015){s1.write(180);}
+                   if(p1>1015 && m1){s1.write(180);}
                    else if(p1<20){s1.write(0);}
                    else{s1.write(90);}
                   }
@@ -149,7 +149,7 @@ void controlLeftBar(){
   if(gameState==1&&returnBallState==0){m4=digitalRead(lrLLpin);if(m4){s2.write(80);}else{s2.write(90);}
                   }
   else if(gameState==2){p2 = analogRead(p2pin);m3=digitalRead(lrULpin);m4=digitalRead(lrLLpin);
-                   if(p2>1015){s2.write(0);}
+                   if(p2>1015 && m4){s2.write(0);}
                    else if(p2<20){s2.write(180);}
                    else{s2.write(90);}
                   }
