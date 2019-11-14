@@ -199,7 +199,7 @@ Serial.println(' ');
                         musicThread.check();
                         ballReturnThread.check();
                         if(!m1&&!m4){
-                          if(returnBallState==0){s1.detach();s2.detach();returnStartTime=millis()/1000.0;returnBallState=1;s3.attach(s3pin);delay(100);}
+                          if(returnBallState==0){s1.write(90);s2.write(90);s1.detach();s2.detach();returnStartTime=millis()/1000.0;returnBallState=1;s3.attach(s3pin);delay(100);}
                           else if(millis()/1000.0-returnStartTime>5&&returnBallState==1){gameState=2;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);clearDisplay();}
                           }
                         if(lifeCount==0){gameState=3;thisNote=0;}
@@ -241,16 +241,16 @@ Serial.println(' ');
                         }
                         if(lifeCount==0){gameState=3;thisNote=0;}
   
-                        if(currTarget==1){if(analogRead(lr1pin)<20){targetBool=1;digitalWrite(led1pin,LOW);}}
-                        else if(currTarget==2){if(analogRead(lr2pin)<20){targetBool=1;digitalWrite(led2pin,LOW);}}
-                        else if(currTarget==3){if(analogRead(lr3pin)<20){targetBool=1;digitalWrite(led3pin,LOW);}}
-                        else if(currTarget==4){if(analogRead(lr4pin)<40 ){targetBool=1;digitalWrite(led4pin,LOW);}}
-                        else if(currTarget==5){if(analogRead(lr5pin)<20){targetBool=1;digitalWrite(led5pin,LOW);}}
-                        else if(currTarget==6){if(analogRead(lr6pin)<20){targetBool=1;digitalWrite(led6pin,LOW);}}
-                        else if(currTarget==7){if(analogRead(lr7pin)<20){targetBool=1;digitalWrite(led7pin,LOW);}}
-                        else if(currTarget==8){if(analogRead(lr8pin)<20){targetBool=1;digitalWrite(led8pin,LOW);}}
-                        else if(currTarget==9){if(analogRead(lr9pin)<20){targetBool=1;digitalWrite(led9pin,LOW);}}
-                        else if(currTarget==10){if(analogRead(lr10pin)<20){targetBool=1;digitalWrite(led10pin,LOW);}}
+                        if(currTarget==1){if(analogRead(lr1pin)<10){targetBool=1;digitalWrite(led1pin,LOW);}}
+                        else if(currTarget==2){if(analogRead(lr2pin)<10){targetBool=1;digitalWrite(led2pin,LOW);}}
+                        else if(currTarget==3){if(analogRead(lr3pin)<10){targetBool=1;digitalWrite(led3pin,LOW);}}
+                        else if(currTarget==4){if(analogRead(lr4pin)<10){targetBool=1;digitalWrite(led4pin,LOW);}}
+                        else if(currTarget==5){if(analogRead(lr5pin)<10){targetBool=1;digitalWrite(led5pin,LOW);}}
+                        else if(currTarget==6){if(analogRead(lr6pin)<10){targetBool=1;digitalWrite(led6pin,LOW);}}
+                        else if(currTarget==7){if(analogRead(lr7pin)<10){targetBool=1;digitalWrite(led7pin,LOW);}}
+                        else if(currTarget==8){if(analogRead(lr8pin)<10){targetBool=1;digitalWrite(led8pin,LOW);}}
+                        else if(currTarget==9){if(analogRead(lr9pin)<10){targetBool=1;digitalWrite(led9pin,LOW);}}
+                        else if(currTarget==10){if(analogRead(lr10pin)<10){targetBool=1;digitalWrite(led10pin,LOW);}}
                         
     }
   else if(gameState==3){displayThread.check();    
