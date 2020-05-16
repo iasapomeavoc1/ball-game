@@ -2,7 +2,6 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include"pitches.h"
 
 //GLOBALS
 //pins
@@ -56,70 +55,14 @@ int m2=1; //top left endstop value
 int m3=1; //top right endstop value
 int m4=1; //bottom right endstop value
 
-float thisNote = 0;
-int melody1[] = {
-NOTE_G3,NOTE_D4,NOTE_B4,NOTE_A4,NOTE_B4,NOTE_D4,NOTE_B4,NOTE_D4,NOTE_G3,NOTE_D4,NOTE_B4,NOTE_A4,NOTE_B4,NOTE_D4,NOTE_B4,NOTE_D4,
-NOTE_G3,NOTE_E4,NOTE_C5,NOTE_B4,NOTE_C5,NOTE_E4,NOTE_C5,NOTE_E4,NOTE_G3,NOTE_E4,NOTE_C5,NOTE_B4,NOTE_C5,NOTE_E4,NOTE_C5,NOTE_E4,
-NOTE_G3,NOTE_FS4,NOTE_C5,NOTE_B4,NOTE_C5,NOTE_FS4,NOTE_C5,NOTE_FS4,NOTE_G3,NOTE_FS4,NOTE_C5,NOTE_B4,NOTE_C5,NOTE_FS4,NOTE_C5,NOTE_FS4,
-NOTE_G3,NOTE_G4,NOTE_B4,NOTE_A4,NOTE_B4,NOTE_G4,NOTE_B4,NOTE_G4,NOTE_G3,NOTE_G4,NOTE_B4,NOTE_A4,NOTE_B4,NOTE_G4,NOTE_B4,NOTE_FS4,
-NOTE_G3,NOTE_E4,NOTE_B4,NOTE_A4,NOTE_B4,NOTE_G4,NOTE_FS4,NOTE_G4,NOTE_E4,NOTE_G4,NOTE_FS4,NOTE_G4,NOTE_B3,NOTE_D4,NOTE_CS4,NOTE_B3,
-NOTE_CS4,NOTE_G4,NOTE_A4,NOTE_G4,NOTE_A4,NOTE_G4,NOTE_A4,NOTE_G4,NOTE_CS4,NOTE_G4,NOTE_A4,NOTE_G4,NOTE_A4,NOTE_G4,NOTE_A4,NOTE_G4,
-NOTE_FS4,NOTE_A4,NOTE_D5,NOTE_CS5,NOTE_D5,NOTE_A4,NOTE_G4,NOTE_A4,NOTE_FS4,NOTE_A4,NOTE_G4,NOTE_A4,NOTE_D4,NOTE_FS4,NOTE_E4,NOTE_D4,
-NOTE_E3,NOTE_B3,NOTE_G4,NOTE_FS4,NOTE_G4,NOTE_B3,NOTE_G4,NOTE_B3,NOTE_E3,NOTE_B3,NOTE_G4,NOTE_FS4,NOTE_G4,NOTE_B3,NOTE_G4,NOTE_B3,
-NOTE_E3,NOTE_CS4,NOTE_D4,NOTE_E4,NOTE_D4,NOTE_CS4,NOTE_B3,NOTE_A3,NOTE_G4,NOTE_FS4,NOTE_E4,NOTE_D5,NOTE_CS5,NOTE_B4,NOTE_A4,NOTE_G4,
-NOTE_FS4,NOTE_E4,NOTE_D4,NOTE_D5,NOTE_A4,NOTE_D5,NOTE_FS4,NOTE_A4,NOTE_D4,NOTE_E4,NOTE_FS4,NOTE_A4,NOTE_G4,NOTE_FS4,NOTE_E4,NOTE_D4
-};
-int L1 = sizeof(melody1)/sizeof(NOTE_D4);
-int melody2[] = {NOTE_E5,0,NOTE_E5,0,NOTE_E5,NOTE_E5,NOTE_E5,0,
-  NOTE_E5,0,NOTE_E5,0,NOTE_E5,NOTE_E5,NOTE_E5,0,
-  NOTE_E5,0,NOTE_G5,0,NOTE_C5,0,NOTE_D5,0,
-  NOTE_E5,NOTE_E5,NOTE_E5,NOTE_E5,NOTE_E5,NOTE_E5,NOTE_E5,0,
-  NOTE_F5,0,NOTE_F5,0,NOTE_F5,0,NOTE_F5,0,
-  NOTE_F5,0,NOTE_E5,0,NOTE_E5,0,NOTE_E5,0,
-  NOTE_G5,0,NOTE_G5,0,NOTE_F5,0,NOTE_D5,0,
-  NOTE_C5,NOTE_C5,NOTE_C5,NOTE_C5,NOTE_C5,NOTE_C5,NOTE_C5,0,};
-int L2 = sizeof(melody2)/sizeof(NOTE_D4);
-int melody3[] = {
-NOTE_E6,NOTE_E6,0,NOTE_E6,0,
-NOTE_C6,NOTE_E6, 0,
-NOTE_G6, 0, 0,  0,
-NOTE_G5, 0, 0, 0,
-NOTE_C6, 0, 0, NOTE_G5,
-0, 0, NOTE_E5, 0,
-0, NOTE_A5, 0, NOTE_B5,
-0, NOTE_AS5, NOTE_A5, 0,
-NOTE_G5, NOTE_E6, NOTE_G6,
-NOTE_A6, 0, NOTE_F6, NOTE_G6,
-0, NOTE_E6, 0, NOTE_C6,
-NOTE_D6, NOTE_B5, 0, 0,
-NOTE_C6, 0, 0, NOTE_G5,
-0, 0, NOTE_E5, 0,
-0, NOTE_A5, 0, NOTE_B5,
-0, NOTE_AS5, NOTE_A5, 0,
-NOTE_G5, NOTE_E6, NOTE_G6,
-NOTE_A6, 0, NOTE_F6, NOTE_G6,
-0, NOTE_E6, 0, NOTE_C6,
-NOTE_D6, NOTE_B5, 0, 0};
-int L3 = sizeof(melody3)/sizeof(NOTE_D4);
-int melody4[] = {NOTE_E6,NOTE_E6,NOTE_E6-10,NOTE_E6,NOTE_E6,
-NOTE_DS6,NOTE_DS6,NOTE_DS6-10,NOTE_DS6,NOTE_DS6,
-NOTE_D6,NOTE_D6,NOTE_D6-10,NOTE_D6,NOTE_D6,
-NOTE_CS6,NOTE_CS6,NOTE_CS6-10,NOTE_CS6,NOTE_CS6,NOTE_CS6-10,NOTE_CS6,NOTE_CS6,NOTE_CS6-10,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
-int L4 = sizeof(melody4)/sizeof(NOTE_D4);
-int melody5[] = {NOTE_E6,0,NOTE_E6,0,NOTE_E6,0,NOTE_C6,NOTE_C6,0,0,NOTE_E6,0,NOTE_G6,NOTE_G6,NOTE_G6,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
-int L5 = sizeof(melody5)/sizeof(NOTE_D4);
-
-                
 //FUNCTIONS
 void playNote(){
-//  if(gameState==0){tone(6,melody1[(int)thisNote % L1],100);thisNote+=1.0/4.0;}
-//  if(gameState==1){tone(6,melody2[(int)thisNote % L2],100);thisNote+=1.0/2.0;}
-//  if(gameState==2){tone(6,melody3[(int)thisNote % L3],100);thisNote+=1.0/4.0;}
-//  if(gameState==3){tone(6,melody4[(int)thisNote % L4],100);thisNote+=1.0/1.5;}  
-//  if(gameState==4){tone(6,melody5[(int)thisNote % L5],100);thisNote+=1.0/1.5;}
-//  if(gameState==5){tone(6,melody4[(int)thisNote % L4],100);thisNote+=1.0/1.5;}
+//  if(gameState==0){analogWrite(2,255);}
+//  if(gameState==1){analogWrite(2,200);}
+//  if(gameState==2){analogWrite(2,150);}
+//  if(gameState==3){analogWrite(2,100);}
+//  if(gameState==4){analogWrite(2,50);}
+//  if(gameState==5){analogWrite(2,10);}
 }
 
 void updateDisplay(){  
@@ -170,6 +113,7 @@ TimedAction musicThread = TimedAction(50,playNote);
 void setup() {
   Serial.begin(9600);
   lcd.begin();
+  pinMode(2,OUTPUT);
   pinMode(led0pin,OUTPUT);pinMode(led1pin,OUTPUT);pinMode(led2pin,OUTPUT);pinMode(led3pin,OUTPUT);pinMode(led4pin,OUTPUT);pinMode(led5pin,OUTPUT);
   pinMode(led6pin,OUTPUT);pinMode(led7pin,OUTPUT);pinMode(led8pin,OUTPUT);pinMode(led9pin,OUTPUT);pinMode(led10pin,OUTPUT);
   pinMode(ledLRpin,OUTPUT);pinMode(ledURpin,OUTPUT);pinMode(ledLLpin,OUTPUT);pinMode(ledULpin,OUTPUT);
@@ -179,18 +123,19 @@ void setup() {
   
   //digitalWrite(lr0pin,HIGH);
   pinMode(lrLRpin,INPUT);pinMode(lrURpin,INPUT);pinMode(lrLLpin,INPUT);pinMode(lrULpin,INPUT);
+
 }
 
 
 void loop() {
 //Serial.print(gameState);Serial.print(' ');Serial.print(lifeCount);Serial.print(' ');Serial.print(returnBallState);Serial.print(' ');Serial.print(millis()/1000.0-returnStartTime);
 //Serial.print(' '); Serial.print(m1); Serial.print(' '); Serial.print(m4); 
-Serial.print(analogRead(lr2pin));
-Serial.println(' ');
+//Serial.print(analogRead(lr2pin));
+//Serial.println(' ');
 
   if(gameState==0){     displayThread.check();
                         musicThread.check();
-                        if(digitalRead(p3pin)==1){gameState=1;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);s1.write(0);s2.write(180);delay(100);s1.write(90);s2.write(90);
+                        if(digitalRead(p3pin)==1){gameState=1;s1.attach(s1pin);s2.attach(s2pin);s1.write(0);s2.write(180);delay(100);s1.write(90);s2.write(90);
                                                 startTime=millis()/1000.0;clearDisplay();}
   }
   else if(gameState==1){displayThread.check();
@@ -200,9 +145,9 @@ Serial.println(' ');
                         ballReturnThread.check();
                         if(!m1&&!m4){
                           if(returnBallState==0){s1.write(90);s2.write(90);s1.detach();s2.detach();returnStartTime=millis()/1000.0;returnBallState=1;s3.attach(s3pin);delay(100);}
-                          else if(millis()/1000.0-returnStartTime>5&&returnBallState==1){gameState=2;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);clearDisplay();}
+                          else if(millis()/1000.0-returnStartTime>5&&returnBallState==1){gameState=2;s1.attach(s1pin);s2.attach(s2pin);clearDisplay();}
                           }
-                        if(lifeCount==0){gameState=3;thisNote=0;}
+                        if(lifeCount==0){gameState=3;}
                         if(currTarget==1){digitalWrite(led1pin,HIGH);}
                         else if(currTarget==2){digitalWrite(led2pin,HIGH);}
                         else if(currTarget==3){digitalWrite(led3pin,HIGH);}
@@ -224,7 +169,7 @@ Serial.println(' ');
                         musicThread.check();
                         if(millis()/1000.0-returnStartTime>10&&returnBallState==1){returnBallState=2;}
                         else if(millis()/1000.0-returnStartTime>15&&returnBallState==2){returnBallState=3;s3.detach();}
-                        else if(digitalRead(lr0pin)==0&&returnBallState==3){thisNote=0;returnBallState=0;
+                        else if(digitalRead(lr0pin)==0&&returnBallState==3){returnBallState=0;
                                                                         if(targetBool==1){
                                                                         if(currTarget==1){currScore+=2000.0/(millis()/1000.0-returnStartTime)+100;gameState=4;}
                                                                         else if(currTarget==2){currScore+=2000.0/(millis()/1000.0-returnStartTime)+500;gameState=4;}
@@ -237,9 +182,9 @@ Serial.println(' ');
                                                                         else if(currTarget==9){currScore+=50000.0/(millis()/1000.0-returnStartTime)+30000;gameState=4;}
                                                                         else if(currTarget==10){currScore+=100000.0/(millis()/1000.0-returnStartTime)+50000+lifeCount*10000;gameState=3;}                                                                        
                                                                         returnStartTime=millis()/1000.0;currTarget+=1;clearDisplay();}
-                                                                        else{gameState=5; lifeCount=lifeCount-1; currScore = currScore / 2.0; returnStartTime=millis()/1000.0;clearDisplay();}
+                                                                        else{gameState=5; lifeCount=lifeCount-1; returnStartTime=millis()/1000.0;clearDisplay();}
                         }
-                        if(lifeCount==0){gameState=3;thisNote=0;}
+                        if(lifeCount==0){gameState=3;}
   
                         if(currTarget==1){if(analogRead(lr1pin)<10){targetBool=1;digitalWrite(led1pin,LOW);}}
                         else if(currTarget==2){if(analogRead(lr2pin)<10){targetBool=1;digitalWrite(led2pin,LOW);}}
@@ -259,17 +204,17 @@ Serial.println(' ');
                         ballReturnThread.check();
                         musicThread.check();
                         currScore=0;
-                        if(digitalRead(p3pin)==1){gameState=1;thisNote=0;s1.attach(s1pin);s2.attach(s2pin);s1.write(0);s2.write(180);delay(100);s1.write(90);s2.write(90);
+                        if(digitalRead(p3pin)==1){gameState=1;s1.attach(s1pin);s2.attach(s2pin);s1.write(0);s2.write(180);delay(100);s1.write(90);s2.write(90);
                                                 startTime=millis()/1000.0;lifeCount=3;currTarget=1;clearDisplay();}
                         digitalWrite(led1pin,LOW); digitalWrite(led2pin,LOW); digitalWrite(led3pin,LOW); digitalWrite(led4pin,LOW);digitalWrite(led5pin,LOW);    
   digitalWrite(led6pin,LOW);digitalWrite(led7pin,LOW); digitalWrite(led8pin,LOW); digitalWrite(led9pin,LOW); digitalWrite(led10pin,LOW);  
   }
   else if(gameState==4){displayThread.check();
                         musicThread.check();    
-                        if(millis()/1000.0-returnStartTime>2){gameState=1;thisNote=0;targetBool=0;clearDisplay();}
+                        if(millis()/1000.0-returnStartTime>2){gameState=1;targetBool=0;clearDisplay();}
   }
   else if(gameState==5){displayThread.check();
                         musicThread.check();    
-                        if(millis()/1000.0-returnStartTime>2){gameState=1;thisNote=0;targetBool=0;clearDisplay();}
+                        if(millis()/1000.0-returnStartTime>2){gameState=1;targetBool=0;clearDisplay();}
   }
 }
